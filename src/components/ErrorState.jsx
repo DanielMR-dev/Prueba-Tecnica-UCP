@@ -1,0 +1,45 @@
+/**
+ * ErrorState Component
+ * Displays error message with retry button when data fetch fails
+ * 
+ * @param {Object} props
+ * @param {string} props.message - Error message to display
+ * @param {Function} props.onRetry - Callback function for retry button
+ */
+export const ErrorState = ({ message, onRetry }) => {
+    return (
+        <div className="flex flex-col items-center justify-center min-h-[400px] px-4">
+            {/* Error Icon */}
+            <div className="w-16 h-16 mb-4 text-red-500">
+                <svg
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    className="w-full h-full"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                </svg>
+            </div>
+
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Oops! Algo salió mal
+            </h2>
+
+            <p className="text-gray-600 text-center mb-6 max-w-md">
+                {message}
+            </p>
+
+            <button
+                onClick={onRetry}
+                className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+            >
+                Reintentar
+            </button>
+        </div>
+    );
+};
