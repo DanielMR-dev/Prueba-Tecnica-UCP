@@ -48,3 +48,23 @@ export const translateStatus = (status) => {
     if (!status) return 'Desconocido';
     return statusTranslations[status] || status;
 };
+
+/**
+ * Gender translation map
+ */
+const genderTranslations = {
+    'Male': 'Masculino',
+    'Female': 'Femenino',
+    'Genderless': 'Sin género',
+    'unknown': 'Desconocido',
+};
+
+/**
+ * Translates gender from English to Spanish
+ * @param {string} gender - Gender in English
+ * @returns {string} Gender in Spanish
+ */
+export const translateGender = (gender) => {
+    if (!gender) return 'Desconocido';
+    return genderTranslations[gender] || gender;
+};

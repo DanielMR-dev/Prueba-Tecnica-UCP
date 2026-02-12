@@ -1,4 +1,4 @@
-import { translateSpecies, translateStatus } from '../utils/translations';
+import { translateSpecies, translateStatus, translateGender } from '../utils/translations';
 
 /**
  * CharacterCard Component
@@ -10,9 +10,10 @@ import { translateSpecies, translateStatus } from '../utils/translations';
  * @param {string} props.character.image - Character image URL
  * @param {string} props.character.species - Character species
  * @param {string} props.character.status - Character status (Alive, Dead, unknown)
+ * @param {string} props.character.gender - Character gender (Male, Female, Genderless, unknown)
  */
 export const CharacterCard = ({ character }) => {
-    const { name, image, species, status } = character;
+    const { name, image, species, status, gender } = character;
 
     // Status badge color mapping for dark mode
     const statusColors = {
@@ -44,6 +45,10 @@ export const CharacterCard = ({ character }) => {
                 <div className="space-y-2">
                     <p className="text-gray-300 text-sm">
                         <span className="font-semibold text-gray-400">Especie:</span> {translateSpecies(species)}
+                    </p>
+
+                    <p className="text-gray-300 text-sm">
+                        <span className="font-semibold text-gray-400">Género:</span> {translateGender(gender)}
                     </p>
 
                     <div className="flex items-center gap-2">

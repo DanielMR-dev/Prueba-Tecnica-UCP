@@ -24,7 +24,7 @@ export const useCharacters = () => {
             setLoading(true);
             setError(null);
 
-            const data = await getCharacters(1); // Fetch first page (20 characters)
+            const data = await getCharacters(); // Fetch first 20 characters by ID
             setCharacters(data.results);
         } catch (err) {
             setError(err.message);

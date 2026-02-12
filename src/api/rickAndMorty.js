@@ -8,17 +8,20 @@ const BASE_URL = 'https://rickandmortyapi.com/api';
  */
 
 /**
- * Fetches characters from the Rick and Morty API
- * @param {number} page - Page number to fetch (default: 1)
- * @returns {Promise<Object>} API response with character data
+ * Fetches the first 20 characters from the Rick and Morty API
+ * Uses the multiple characters endpoint for better performance
+ * @returns {Promise<Array>} Array of character objects
  * @throws {Error} Network or server errors
  */
-export const getCharacters = async (page = 1) => {
+export const getCharacters = async () => {
     try {
-        const response = await axios.get(`${BASE_URL}/character`, {
-            params: { page },
-        });
-        return response.data;
+        // Generate array of IDs from 1 to 20
+        const ids = Array.from({ length: 20 }, (_, i) => i + 1).join(',');
+
+        const response = await axios.get(`${BASE_URL}/character/${ids}`);
+
+        // The endpoint returns an array directly when multiple IDs are provided
+        return { results: response.data };
     } catch (error) {
         // Re-throw with more descriptive message
         if (error.response) {
