@@ -1,0 +1,88 @@
+PREGUNTAS TÉCNICAS - Rick & Morty Character Browser
+
+================================================================================
+A) ¿Cómo escalarías esto si la API tuviera miles de registros?
+================================================================================
+
+Para escalar esta aplicación con miles de registros, implementaría las siguientes estrategias:
+
+1. PAGINACIÓN Y CARGA INCREMENTAL
+
+En lugar de cargar todos los registros de una vez, implementaría paginación tradicional con botones de "Anterior/Siguiente" o números de página, cargando solo 20-50 registros por página. Alternativamente, usaría Infinite Scroll, que detecta cuando el usuario llega al final de la lista y carga automáticamente la siguiente página, proporcionando una mejor experiencia de usuario para exploración continua. El estado de la página se mantendría en la URL mediante query params para permitir navegación con historial del navegador.
+
+2. VIRTUALIZACIÓN DE LISTAS
+
+Implementaría virtualización usando librerías como React Window o React Virtualized. Esto renderiza solo los elementos visibles en el viewport, reduciendo drásticamente el número de nodos DOM de potencialmente 10,000 a aproximadamente 20. Esto mejora significativamente el performance en listas largas y permite scroll suave sin lag, ya que el navegador solo mantiene en memoria los elementos que el usuario puede ver.
+
+3. CACHING ESTRATÉGICO
+
+Implementaría múltiples niveles de caching. En el lado del cliente, usaría React Query o TanStack Query para cache automático con invalidación inteligente, implementando el patrón stale-while-revalidate, background refetching y deduplicación de requests. Configuraría tiempos de stale de 5 minutos y cache de 10 minutos. También consideraría usar IndexedDB o LocalStorage para persistencia entre sesiones, reduciendo llamadas a la API en visitas repetidas. Para aplicaciones más avanzadas, implementaría Service Workers para cache de respuestas HTTP y funcionalidad offline.
+
+4. BÚSQUEDA SERVER-SIDE
+
+Cambiaría de filtrado local a búsqueda por API cuando el dataset sea grande. Implementaría debounce de 300-500ms para evitar spam de requests mientras el usuario escribe. La búsqueda se haría contra el endpoint de la API con parámetros de query. También añadiría búsqueda avanzada con múltiples filtros como especie, estado, género, y opciones de ordenamiento por nombre o fecha de creación.
+
+5. OPTIMIZACIONES ADICIONALES
+
+Implementaría lazy loading de imágenes con placeholders o skeletons mientras cargan, usando progressive image loading con efecto blur-up. Usaría code splitting para cargar componentes bajo demanda. Aplicaría memoización agresiva en componentes que no necesitan re-renderizar frecuentemente. Para operaciones pesadas de filtrado u ordenamiento, consideraría usar Web Workers para no bloquear el hilo principal de JavaScript.
+
+6. ARQUITECTURA ESCALABLE
+
+Para estado global complejo, usaría Redux Toolkit con RTK Query, o alternativas más ligeras como Zustand con middleware de persistencia. Implementaría prefetching inteligente, precargando la página siguiente cuando el usuario hace hover sobre el botón de paginación, o usando predictive prefetching basado en patrones de comportamiento del usuario. A nivel de infraestructura, cachearía respuestas de API en CDN para reducir latencia usando edge locations.
+
+
+================================================================================
+B) ¿Dónde pondrías la lógica de fetch idealmente?
+================================================================================
+
+La lógica de fetch debe estar separada en capas bien definidas siguiendo el principio de separación de responsabilidades:
+
+1. CAPA DE SERVICIOS (API Layer)
+
+Crearía una carpeta src/api/ que contiene la comunicación pura con la API. Aquí tendría un archivo client.js con la configuración de axios o fetch, incluyendo baseURL, timeout, headers por defecto, y interceptors para manejo centralizado de errores, autenticación, logging y retry logic. Los endpoints específicos estarían en archivos separados como rickAndMorty.js, exponiendo funciones como getAll, search, getById, getMultiple. Esta capa no maneja estado, solo hace requests HTTP y retorna promesas.
+
+Ventajas: Separación clara de responsabilidades, fácil de testear mediante mocks de axios, reutilizable en diferentes contextos, y centraliza toda la configuración de red.
+
+2. CUSTOM HOOKS
+
+Crearía una carpeta src/hooks/ donde cada hook encapsula la lógica de fetching, estado y side effects. Por ejemplo, useCharacters.js manejaría los estados de loading, error y data, usando useEffect para hacer el fetch cuando cambian las dependencias. Estos hooks llaman a los servicios de la capa API pero añaden la lógica de React (useState, useEffect, etc).
+
+Ventajas: Encapsula lógica de fetching, reutilizable en múltiples componentes, testeable independientemente, y mantiene los componentes limpios.
+
+3. LIBRERÍA DE DATA FETCHING (Recomendado para Escala)
+
+Para proyectos escalables, usaría React Query o TanStack Query. Esta librería maneja automáticamente cache, invalidación, deduplicación de requests, background refetching, optimistic updates, y tiene soporte built-in para infinite scroll. Configuraría un queryClient con opciones por defecto como staleTime de 5 minutos, cacheTime de 10 minutos, 3 reintentos automáticos, y deshabilitaría refetch on window focus. Los custom hooks entonces serían wrappers delgados sobre useQuery.
+
+Como alternativa más ligera, SWR (Stale-While-Revalidate) de Vercel ofrece funcionalidad similar con menor tamaño de bundle.
+
+Ventajas de React Query: Cache automático con invalidación inteligente, deduplicación de requests, background refetching, optimistic updates, infinite scroll built-in, DevTools para debugging, y soporte para SSR/SSG.
+
+4. ESTADO GLOBAL (Para casos complejos)
+
+Si la aplicación requiere estado global complejo, usaría Redux Toolkit con RTK Query, que combina Redux con capacidades de data fetching similares a React Query. RTK Query genera automáticamente hooks como useGetCharactersQuery basados en la definición de endpoints. Esto es ideal para aplicaciones enterprise donde múltiples partes de la UI necesitan acceder a los mismos datos.
+
+5. COMPONENTES (Sin lógica de fetch)
+
+Los componentes solo deben encargarse de presentación. Importan y usan los custom hooks, pero no contienen lógica de fetching directamente. Solo manejan el renderizado condicional basado en los estados de loading, error y data que reciben del hook.
+
+RECOMENDACIÓN POR ESCALA DEL PROYECTO:
+
+Para proyectos pequeños o medianos como el actual: API Layer en src/api/ con servicios puros, Custom Hooks en src/hooks/ para estado y fetching, y Componentes que solo manejan UI.
+
+Para proyectos grandes y escalables: API Layer con servicios puros, React Query para data fetching y cache, Custom Hooks como wrappers de React Query, y Componentes solo para UI.
+
+Para aplicaciones enterprise: API Layer con interceptors avanzados, Redux Toolkit con RTK Query, normalización de datos usando normalizr, middleware personalizado, error boundaries, y logging centralizado.
+
+PRINCIPIOS CLAVE:
+
+Separación de Responsabilidades: API Layer maneja HTTP requests, Hooks manejan estado y lógica de negocio, Componentes solo presentación.
+
+Single Source of Truth: Una librería de data fetching centralizada para evitar duplicación de estado.
+
+Testabilidad: Mock fácil de servicios, hooks testeables con testing-library/react-hooks.
+
+Escalabilidad: Fácil agregar nuevos endpoints, reutilización de lógica, performance optimizada.
+
+Developer Experience: DevTools para debugging, TypeScript para type safety, documentación clara.
+
+Esta arquitectura permite que el código sea mantenible, testeable y escalable a medida que la aplicación crece.
