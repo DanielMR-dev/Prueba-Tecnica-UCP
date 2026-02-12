@@ -23,12 +23,12 @@ export const SearchBar = ({ value, onChange }) => {
                     value={value}
                     onChange={onChange}
                     placeholder="Buscar personajes por nombre..."
-                    className="w-full px-4 py-3 pl-12 pr-12 text-gray-900 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 pl-12 pr-12 text-gray-100 bg-[#0d1117] border-2 border-dark-border rounded-lg shadow-[0_8px_30px_rgb(0,0,0,0.4)] focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent focus:shadow-[0_8px_30px_rgba(0,255,65,0.2)] transition-all placeholder-gray-500"
                     aria-label="Buscar personajes por nombre"
                 />
 
                 {/* Search Icon */}
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-accent">
                     <svg
                         className="w-5 h-5"
                         fill="none"
@@ -49,7 +49,7 @@ export const SearchBar = ({ value, onChange }) => {
                 {value && (
                     <button
                         onClick={handleClear}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-accent transition-colors"
                         aria-label="Limpiar búsqueda"
                     >
                         <svg

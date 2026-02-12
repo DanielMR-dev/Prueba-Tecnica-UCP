@@ -35,35 +35,3 @@ export const getCharacters = async (page = 1) => {
         }
     }
 };
-
-/**
- * Searches characters by name
- * @param {string} name - Character name to search
- * @returns {Promise<Object>} API response with filtered character data
- * @throws {Error} Network or server errors
- * Note: API returns 404 when no results found - this should be handled as empty state, not error
- */
-export const searchCharactersByName = async (name) => {
-    try {
-        const response = await axios.get(`${BASE_URL}/character`, {
-            params: { name },
-        });
-        return response.data;
-    } catch (error) {
-        // 404 means no results - this is NOT an error state
-        if (error.response && error.response.status === 404) {
-            return { results: [] };
-        }
-
-        // Handle other errors
-        if (error.response) {
-            throw new Error(
-                `API Error: ${error.response.status} - ${error.response.statusText}`
-            );
-        } else if (error.request) {
-            throw new Error('Network Error: No response from server. Check your connection.');
-        } else {
-            throw new Error(`Request Error: ${error.message}`);
-        }
-    }
-};

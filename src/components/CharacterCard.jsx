@@ -1,3 +1,5 @@
+import { translateSpecies, translateStatus } from '../utils/translations';
+
 /**
  * CharacterCard Component
  * Displays individual character information in a card format
@@ -12,22 +14,22 @@
 export const CharacterCard = ({ character }) => {
     const { name, image, species, status } = character;
 
-    // Status badge color mapping
+    // Status badge color mapping for dark mode
     const statusColors = {
-        Alive: 'bg-green-100 text-green-800 border-green-200',
-        Dead: 'bg-red-100 text-red-800 border-red-200',
-        unknown: 'bg-gray-100 text-gray-800 border-gray-200',
+        Alive: 'bg-green-900 text-green-300 border-green-600',
+        Dead: 'bg-red-900 text-red-300 border-red-600',
+        unknown: 'bg-gray-800 text-gray-400 border-gray-600',
     };
 
     const statusColor = statusColors[status] || statusColors.unknown;
 
     return (
-        <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300">
+        <article className="bg-dark-surface rounded-lg overflow-hidden hover:scale-105 transition-all duration-300 border border-dark-border shadow-[0_8px_30px_rgb(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(0,255,65,0.3)]">
             {/* Character Image */}
-            <div className="aspect-square overflow-hidden bg-gray-200">
+            <div className="aspect-square overflow-hidden bg-dark-bg">
                 <img
                     src={image}
-                    alt={`${name} - ${species}`}
+                    alt={`${name} - ${translateSpecies(species)}`}
                     className="w-full h-full object-cover"
                     loading="lazy"
                 />
@@ -35,21 +37,21 @@ export const CharacterCard = ({ character }) => {
 
             {/* Character Info */}
             <div className="p-4">
-                <h2 className="text-xl font-bold text-gray-900 mb-2 truncate">
+                <h2 className="text-xl font-bold text-accent mb-2 truncate drop-shadow-[0_0_8px_rgba(0,255,65,0.3)]">
                     {name}
                 </h2>
 
                 <div className="space-y-2">
-                    <p className="text-gray-600 text-sm">
-                        <span className="font-semibold">Especie:</span> {species}
+                    <p className="text-gray-300 text-sm">
+                        <span className="font-semibold text-gray-400">Especie:</span> {translateSpecies(species)}
                     </p>
 
                     <div className="flex items-center gap-2">
-                        <span className="text-gray-600 text-sm font-semibold">Estado:</span>
+                        <span className="text-gray-400 text-sm font-semibold">Estado:</span>
                         <span
                             className={`inline-block px-2 py-1 text-xs font-medium rounded-full border ${statusColor}`}
                         >
-                            {status === 'Alive' ? 'Vivo' : status === 'Dead' ? 'Muerto' : 'Desconocido'}
+                            {translateStatus(status)}
                         </span>
                     </div>
                 </div>

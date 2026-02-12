@@ -9,7 +9,7 @@ export const EmptyState = ({ searchQuery }) => {
     return (
         <div className="flex flex-col items-center justify-center min-h-[400px] px-4">
             {/* Empty Icon */}
-            <div className="w-16 h-16 mb-4 text-gray-400">
+            <div className="w-16 h-16 mb-4 text-gray-500">
                 <svg
                     fill="none"
                     stroke="currentColor"
@@ -25,14 +25,14 @@ export const EmptyState = ({ searchQuery }) => {
                 </svg>
             </div>
 
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-gray-100 mb-2">
                 No se encontraron personajes
             </h2>
 
-            <p className="text-gray-600 text-center max-w-md">
+            <p className="text-gray-400 text-center max-w-md">
                 {searchQuery ? (
                     <>
-                        No hay resultados para <span className="font-semibold">"{searchQuery}"</span>.
+                        No hay resultados para <span className="font-semibold text-accent">"{searchQuery}"</span>.
                         <br />
                         Intenta con otro nombre.
                     </>

@@ -61,13 +61,13 @@ function App() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+        <div className="min-h-screen bg-gradient-to-br from-dark-bg via-dark-surface to-dark-bg">
             {/* Header */}
-            <header className="bg-white shadow-sm border-b border-gray-200">
+            <header className="bg-dark-surface shadow-lg border-b border-dark-border backdrop-blur-sm bg-opacity-80">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                    <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 text-center">
+                    <h1 className="text-3xl sm:text-4xl font-bold text-accent text-center drop-shadow-[0_0_10px_rgba(0,255,65,0.5)]">
                         Rick & Morty
-                        <span className="block text-lg sm:text-xl font-normal text-gray-600 mt-1">
+                        <span className="block text-lg sm:text-xl font-normal text-gray-300 mt-1">
                             Explorador de Personajes
                         </span>
                     </h1>
@@ -86,14 +86,14 @@ function App() {
             </main>
 
             {/* Footer */}
-            <footer className="mt-12 py-6 text-center text-gray-600 text-sm">
+            <footer className="mt-12 py-6 text-center text-gray-400 text-sm">
                 <p>
                     Datos proporcionados por{' '}
                     <a
                         href="https://rickandmortyapi.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 underline"
+                        className="text-accent hover:text-accent-light underline transition-colors"
                     >
                         Rick and Morty API
                     </a>
